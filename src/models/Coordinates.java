@@ -10,9 +10,10 @@ public class Coordinates implements Serializable {
     private float x;
     private Double y; //Значение поля должно быть больше -587, Поле не может быть null
 
-    public Coordinates(){}
+    public Coordinates() {
+    }
 
-    public Coordinates(float x, Double y){
+    public Coordinates(float x, Double y) {
         this.x = x;
         this.y = y;
     }
@@ -34,7 +35,7 @@ public class Coordinates implements Serializable {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("{").append("\n");
         sb.append("\t\t").append("x: ").append(x).append("\n");

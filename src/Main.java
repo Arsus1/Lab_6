@@ -15,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         String mode = System.getProperty("mode", "cli").toLowerCase();
-        switch (mode){
+        switch (mode) {
             case "cli":
                 new CLI();
                 break;

@@ -12,11 +12,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 class LocalDateAdapter extends XmlAdapter<String, LocalDate> implements Serializable {
-    public LocalDate unmarshal(String v)  {
+    public LocalDate unmarshal(String v) {
         return LocalDate.parse(v);
     }
 
-    public String marshal(LocalDate v)  {
+    public String marshal(LocalDate v) {
         return v.toString();
     }
 }
@@ -41,8 +41,10 @@ public class City implements Comparable, Serializable {
     private Government government; //Поле может быть null
     private Human governor; //Поле не может быть null
 
-    public City(){}
-    public City(String name, Coordinates coordinates, Double area, long population, long metersAboveSeaLevel, double timezone, boolean capital, Government government, Human governor){
+    public City() {
+    }
+
+    public City(String name, Coordinates coordinates, Double area, long population, long metersAboveSeaLevel, double timezone, boolean capital, Government government, Human governor) {
         //this.id = id;
         this.name = name;
         this.coordinates = coordinates;
@@ -57,12 +59,12 @@ public class City implements Comparable, Serializable {
     }
 
 
-    public void checkFields(){
-        if(id != 0L){
-            if(!NumUtil.isInRange(id, new BigDecimal(0), NumUtil.LONG_MAX)){
+    public void checkFields() {
+        if (id != 0L) {
+            if (!NumUtil.isInRange(id, new BigDecimal(0), NumUtil.LONG_MAX)) {
                 throw new InvalidValueException("Какие то из чисел не входят в рамки ограничения.");
             }
-        }else {
+        } else {
             throw new InvalidValueException("Поле id пустое.");
         }
 
@@ -71,31 +73,31 @@ public class City implements Comparable, Serializable {
             throw new InvalidValueException("Поле name пустое.");
         }
 
-        if(population != 0L){
-            if(!NumUtil.isInRange(population, new BigDecimal(0), NumUtil.FLOAT_MAX)){
+        if (population != 0L) {
+            if (!NumUtil.isInRange(population, new BigDecimal(0), NumUtil.FLOAT_MAX)) {
                 throw new InvalidValueException("Какие то из чисел не входят в рамки ограничения.");
             }
         }
 
-        if(!NumUtil.isInRange(area, new BigDecimal(0), NumUtil.DOUBLE_MAX) ||
+        if (!NumUtil.isInRange(area, new BigDecimal(0), NumUtil.DOUBLE_MAX) ||
                 !NumUtil.isInRange(timezone, new BigDecimal(-13), new BigDecimal(15))
-        ){
+        ) {
             throw new InvalidValueException("Какие то из чисел не входят в рамки ограничения.");
         }
 
-        if (coordinates != null){
-            if(!NumUtil.isInRange(coordinates.getY(), new BigDecimal(-587), NumUtil.DOUBLE_MAX)){
+        if (coordinates != null) {
+            if (!NumUtil.isInRange(coordinates.getY(), new BigDecimal(-587), NumUtil.DOUBLE_MAX)) {
                 throw new InvalidValueException("Какие то из чисел не входят в рамки ограничения.");
             }
-        }else {
+        } else {
             throw new InvalidValueException("Поле coordinates пустое.");
         }
 
-        if(governor != null){
-            if(!NumUtil.isInRange(governor.getAge(), new BigDecimal(0), NumUtil.INTEGER_MAX)){
+        if (governor != null) {
+            if (!NumUtil.isInRange(governor.getAge(), new BigDecimal(0), NumUtil.INTEGER_MAX)) {
                 throw new InvalidValueException("Какие то из чисел не входят в рамки ограничения.");
             }
-        }else {
+        } else {
             throw new InvalidValueException("Поле governor пустое.");
         }
     }
@@ -190,7 +192,7 @@ public class City implements Comparable, Serializable {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("{").append("\n");
         sb.append("\t").append("id: ").append(this.id).append("\n");

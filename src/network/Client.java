@@ -46,7 +46,7 @@ public class Client {
 
     private void connect(String host, int port) throws IOException {
         PORT = port;
-        IPAddress = InetAddress.getByName( host );
+        IPAddress = InetAddress.getByName(host);
         socket = new DatagramSocket();
         socket.setSoTimeout(3000);
     }
@@ -64,7 +64,7 @@ public class Client {
             } else {
                 connect("localhost", AppConstant.DEFAULT_PORT);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.err.println(ex.getMessage());
             System.exit(1);
         }
@@ -75,14 +75,14 @@ public class Client {
 
         while (true) {
             consoleManager.write("Введите имя: ");
-            if(consoleManager.hasNextLine()) {
+            if (consoleManager.hasNextLine()) {
                 String str = consoleManager.read();
                 if (!str.isEmpty()) {
                     this.userPacket = new UserPacket(str);
                     send(new LoginPacket(this.userPacket));
                     consoleManager.writeln("Waiting to connect to the server...");
                     objectHandler(recv());
-                    if(isLogin) break;
+                    if (isLogin) break;
                 }
             }
         }
@@ -102,15 +102,19 @@ public class Client {
     }
 
     private void sendCommand(String sCmd, ConsoleManager cMgr) throws IOException, ClassNotFoundException {
-        if(sCmd.isEmpty() || executeFault) return;
+        if (sCmd.isEmpty() || executeFault) return;
         try {
             AbstractCommand cmd = CommandsManager.getInstance().parseCommand(sCmd);
-            if(cmd instanceof ExitCommand){ send(new LogoutPacket(this.userPacket)); socket.disconnect(); isConnected = false; }
-            else if(cmd instanceof SaveCommand){ cMgr.writeln("Команда не работает в клиентской части."); }
-            else if(cmd instanceof ExecuteScriptCommand){
+            if (cmd instanceof ExitCommand) {
+                send(new LogoutPacket(this.userPacket));
+                socket.disconnect();
+                isConnected = false;
+            } else if (cmd instanceof SaveCommand) {
+                cMgr.writeln("Команда не работает в клиентской части.");
+            } else if (cmd instanceof ExecuteScriptCommand) {
 
                 executeCount++;
-                if(executeCount == 127) throw new StackOverflowError();
+                if (executeCount == 127) throw new StackOverflowError();
                 /*if(executePaths.contains(cmd.getArgs()[0])) {
                     executeFault = true;
                     throw new SelfCallingScriptException("Рекурсивный вызов запрещен");
@@ -122,50 +126,51 @@ public class Client {
                 int lineNum = 1;
                 try {
                     cMgr = new ConsoleManager(new FileReader(pathToScript.toFile()), new OutputStreamWriter(System.out), true);
-                    for (lineNum=1; cMgr.hasNextLine(); lineNum++) {
+                    for (lineNum = 1; cMgr.hasNextLine(); lineNum++) {
                         String line = cMgr.read().trim();
-                        if(!line.isEmpty() && !executeFault) { sendCommand(line, cMgr); }
+                        if (!line.isEmpty() && !executeFault) {
+                            sendCommand(line, cMgr);
+                        }
                     }
                 } catch (FileNotFoundException ex) {
                     executeFault = true;
                     consoleManager.writeln("Файла не найден.");
                     log.error(ex.getMessage());
-                }catch (SelfCallingScriptException ex){
+                } catch (SelfCallingScriptException ex) {
                     consoleManager.writeln(ex.getMessage());
                     log.error(ex.getMessage());
-                }catch (StackOverflowError ex){
-                    if(!executeFault) {
+                } catch (StackOverflowError ex) {
+                    if (!executeFault) {
                         consoleManager.writeln("Стек переполнен, выполнение прервано");
                     }
 
                     executeFault = true;
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     executeFault = true;
                     consoleManager.writeln(ex.getMessage());
                     log.error(ex.getMessage());
                 }
 
-            }
-            else {
+            } else {
                 if (cmd.getNeedInput()) cmd.setInputData(cmd.getInput(cMgr));
                 send(cmd);
                 objectHandler(recv());
             }
-        }catch (NoCommandException ex) {
+        } catch (NoCommandException ex) {
             cMgr.writeln("Такая команда не найдена :(\nВведите команду help, чтобы вывести спискок команд");
             log.error(ex.getMessage());
-        }catch (NumberFormatException|ClassCastException ex){
+        } catch (NumberFormatException | ClassCastException ex) {
             cMgr.writeln("Ошибка во время каста\n" + ex.getMessage());
             log.error(ex.getMessage());
-        } catch (InvalidValueException ex){
+        } catch (InvalidValueException ex) {
             cMgr.writeln(ex.getMessage());
             log.error(ex.getMessage());
         }
     }
 
 
-    private void objectHandler(Object obj){
-        if(obj != null) {
+    private void objectHandler(Object obj) {
+        if (obj != null) {
             if (obj instanceof LoginSuccessPacket) {
                 isConnected = true;
                 isLogin = true;
@@ -188,7 +193,7 @@ public class Client {
         try {
             DatagramPacket packet = new DatagramPacket(buf.array(), buf.array().length, IPAddress, PORT);
             socket.send(packet);
-        }catch (IOException ex){
+        } catch (IOException ex) {
             consoleManager.writeln(ex.getMessage());
             log.error(ex.getMessage());
         }
@@ -205,8 +210,8 @@ public class Client {
                 out = Serializer.Deserialize(received.getData());
             }
 
-        }catch (SocketTimeoutException ex){
-            if(tryConnect == 0) System.exit(1);
+        } catch (SocketTimeoutException ex) {
+            if (tryConnect == 0) System.exit(1);
 
             tryConnect--;
             consoleManager.writeln("Failed to connect");

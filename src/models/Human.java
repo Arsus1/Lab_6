@@ -9,8 +9,10 @@ import java.io.Serializable;
 public class Human implements Comparable, Serializable {
     private Integer age; //Значение поля должно быть больше 0
 
-    public Human(){}
-    public Human(Integer age){
+    public Human() {
+    }
+
+    public Human(Integer age) {
         this.age = age;
     }
 
@@ -23,7 +25,7 @@ public class Human implements Comparable, Serializable {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("{").append("\n");
         sb.append("\t\t").append("age: ").append(age).append("\n");

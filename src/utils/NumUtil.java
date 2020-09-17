@@ -16,7 +16,7 @@ public class NumUtil {
                 bigDecimal = new BigDecimal(number.longValue());
             } else if (number instanceof Float || number instanceof Double) {
                 bigDecimal = new BigDecimal(number.doubleValue());
-            }else{
+            } else {
                 bigDecimal = new BigDecimal(number.doubleValue());
             }
             return max.compareTo(bigDecimal) >= 0
@@ -27,7 +27,7 @@ public class NumUtil {
     }
 
     public static boolean isInRange2(BigDecimal number, BigDecimal min,
-                                    BigDecimal max) {
+                                     BigDecimal max) {
         try {
             return max.compareTo(number) >= 0
                     && min.compareTo(number) <= 0;

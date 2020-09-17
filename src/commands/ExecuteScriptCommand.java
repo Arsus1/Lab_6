@@ -14,7 +14,8 @@ import java.nio.file.Paths;
 public class ExecuteScriptCommand extends AbstractCommand {
 
     private boolean executeFault = false;
-    public ExecuteScriptCommand(){
+
+    public ExecuteScriptCommand() {
         cmdName = "execute_script";
         description = "выполняет команды из скрипта";
         argCount = 1;
@@ -30,17 +31,17 @@ public class ExecuteScriptCommand extends AbstractCommand {
         int lineNum = 1;
         try {
             ConsoleManager _consoleManager = new ConsoleManager(new FileReader(pathToScript.toFile()), new OutputStreamWriter(System.out), true);
-            for (lineNum=1; _consoleManager.hasNextLine(); lineNum++) {
+            for (lineNum = 1; _consoleManager.hasNextLine(); lineNum++) {
                 String line = _consoleManager.read().trim();
-                if(line.equals("")) continue;
+                if (line.equals("")) continue;
 
-                if(!executeFault) CommandsManager.getInstance().execute(line, _consoleManager, collectionManager);
+                if (!executeFault) CommandsManager.getInstance().execute(line, _consoleManager, collectionManager);
             }
             //consoleManager.writeln("Скрипт выполнен.");
         } catch (FileNotFoundException e) {
             executeFault = true;
             consoleManager.writeln("Файла скрипта не найден.");
-        }catch (StackOverflowError | NullPointerException ex){
+        } catch (StackOverflowError | NullPointerException ex) {
             executeFault = true;
             consoleManager.writeln("Стек переполнен, выполнение прервано");
         }

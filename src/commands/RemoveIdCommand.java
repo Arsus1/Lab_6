@@ -6,7 +6,7 @@ import managers.ConsoleManager;
 
 public class RemoveIdCommand extends AbstractCommand {
 
-    public RemoveIdCommand(){
+    public RemoveIdCommand() {
         cmdName = "remove";
         description = "удаляет элемент из коллекции по его id";
         argCount = 1;
@@ -21,7 +21,7 @@ public class RemoveIdCommand extends AbstractCommand {
             throw new InvalidValueException(e.getMessage());
         }
 
-        if(!collectionManager.checkIdExist(id))
+        if (!collectionManager.checkIdExist(id))
             throw new InvalidValueException("Такого id не существует");
 
         collectionManager.remove(id);

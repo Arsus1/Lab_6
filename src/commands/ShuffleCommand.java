@@ -4,7 +4,7 @@ import managers.CollectionManager;
 import managers.ConsoleManager;
 
 public class ShuffleCommand extends AbstractCommand {
-    public ShuffleCommand(){
+    public ShuffleCommand() {
         cmdName = "shuffle";
         description = "перемешивает элементы коллекции в случайном порядке";
     }

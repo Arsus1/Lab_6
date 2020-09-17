@@ -22,6 +22,7 @@ public class CollectionManager {
 
     /**
      * Класс, который работает с коллекцией
+     *
      * @param fileName
      * @throws IOException
      */
@@ -38,7 +39,7 @@ public class CollectionManager {
             this.load();
             initDate = LocalDate.now();
             System.out.println("Коллекция загружена");
-        }else {
+        } else {
             System.out.println("Файл не найден");
             System.exit(1);
         }
@@ -46,10 +47,11 @@ public class CollectionManager {
 
     /**
      * добавляет новый элемент
+     *
      * @param city
      */
-    public void addElement(City city){
-        maxId+=1;
+    public void addElement(City city) {
+        maxId += 1;
         city.setId(maxId);
         city.setCreationDate(LocalDate.now());
         city.checkFields();
@@ -59,10 +61,11 @@ public class CollectionManager {
 
     /**
      * добавляет новый элемент с условием
+     *
      * @param city
      * @return
      */
-    public boolean addIfMin(City city){
+    public boolean addIfMin(City city) {
         List<City> cities = this.getCityCollection().stream().sorted().collect(Collectors.toList());
         if (cities.isEmpty()) {
             return false;
@@ -86,12 +89,13 @@ public class CollectionManager {
 
     /**
      * удаляет элементы, меньше заданного
+     *
      * @param city
      */
-    public void removeLower(City city){
+    public void removeLower(City city) {
         List<City> cities = this.getCityCollection().stream().sorted().collect(Collectors.toList());
         cities.forEach(x -> {
-            if(x.compareTo(city) < 0){
+            if (x.compareTo(city) < 0) {
                 this.getCityCollection().remove(x);
             }
         });
@@ -100,20 +104,22 @@ public class CollectionManager {
 
     /**
      * удаляет элемент коллекции
+     *
      * @param id
      */
-    public void remove(long id){
-        Map.Entry<Integer,City> entry = findById(id).entrySet().iterator().next();
+    public void remove(long id) {
+        Map.Entry<Integer, City> entry = findById(id).entrySet().iterator().next();
         this.getCityCollection().remove(entry.getValue());
     }
 
     /**
      * обновляет коллекцию по его id
+     *
      * @param city
      * @param id
      */
-    public void update(City city, Long id){
-        Map.Entry<Integer,City> entry = findById(id).entrySet().iterator().next();
+    public void update(City city, Long id) {
+        Map.Entry<Integer, City> entry = findById(id).entrySet().iterator().next();
         City updCity = entry.getValue();
         updCity.setName(city.getName());
         updCity.setArea(city.getArea());
@@ -128,9 +134,9 @@ public class CollectionManager {
         this.getCityCollection().set(entry.getKey(), updCity);
     }
 
-    public boolean checkIdExist(Long id){
-        for(int i=0;i<this.getCityCollection().size();i++) {
-            if(this.getCityCollection().get(i).getId().equals(id)) {
+    public boolean checkIdExist(Long id) {
+        for (int i = 0; i < this.getCityCollection().size(); i++) {
+            if (this.getCityCollection().get(i).getId().equals(id)) {
                 return true;
             }
         }
@@ -140,13 +146,14 @@ public class CollectionManager {
 
     /**
      * ищет элемент по id
+     *
      * @param id
      * @return
      */
-    private Map<Integer, City> findById(Long id){
+    private Map<Integer, City> findById(Long id) {
         Map<Integer, City> map = new HashMap<>();
-        for(int i=0;i<this.getCityCollection().size();i++) {
-            if(this.getCityCollection().get(i).getId().equals(id)) {
+        for (int i = 0; i < this.getCityCollection().size(); i++) {
+            if (this.getCityCollection().get(i).getId().equals(id)) {
                 map.put(i, this.getCityCollection().get(i));
                 return map;
             }
@@ -157,13 +164,14 @@ public class CollectionManager {
 
     /**
      * находит элементы по его имени
+     *
      * @param name
      * @return
      */
-    public ArrayList<City> findByName(String name){
+    public ArrayList<City> findByName(String name) {
         ArrayList<City> cities = new ArrayList<City>();
-        this.getCityCollection().forEach(x ->{
-            if(x.getName().contains(name))
+        this.getCityCollection().forEach(x -> {
+            if (x.getName().contains(name))
                 cities.add(x);
         });
 
@@ -172,12 +180,13 @@ public class CollectionManager {
 
     /**
      * загрузка xml из файла
+     *
      * @throws IOException
      */
     private void load() throws IOException {
-        try{
-            if(!xmlCollection.canWrite() || !xmlCollection.canRead()) throw new SecurityException();
-        }catch (SecurityException ex){
+        try {
+            if (!xmlCollection.canWrite() || !xmlCollection.canRead()) throw new SecurityException();
+        } catch (SecurityException ex) {
             System.out.println("Файл недоступен");
             System.exit(1);
         }
@@ -188,8 +197,8 @@ public class CollectionManager {
             JAXBContext jaxbContext = JAXBContext.newInstance(Cities.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             citiesArray = (Cities) jaxbUnmarshaller.unmarshal(inputStreamReader);
-            citiesArray.getCities().forEach(x-> {
-                if(maxId < x.getId())
+            citiesArray.getCities().forEach(x -> {
+                if (maxId < x.getId())
                     maxId = x.getId();
             });
 
@@ -204,7 +213,7 @@ public class CollectionManager {
     /**
      * очищает коллекцию
      */
-    public void clear(){
+    public void clear() {
         this.getCityCollection().clear();
     }
 
@@ -212,7 +221,7 @@ public class CollectionManager {
     /**
      * сохранить коллекцию в xml
      */
-    public void save(){
+    public void save() {
         try {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(xmlCollection));
             JAXBContext jaxbContext = JAXBContext.newInstance(Cities.class);
@@ -227,11 +236,11 @@ public class CollectionManager {
     /**
      * перемешивает элементы в случайном порядке
      */
-    public void shuffle(){
+    public void shuffle() {
         Collections.shuffle(this.getCityCollection());
     }
 
-    public ArrayList<City> sortById(){
+    public ArrayList<City> sortById() {
         ArrayList<City> sortColl = new ArrayList<City>(this.getCityCollection());
         sortColl.sort(Comparator.comparing(e -> e.getId()));
 
@@ -240,9 +249,10 @@ public class CollectionManager {
 
     /**
      * сортирует по часовому поясу
+     *
      * @return
      */
-    public ArrayList<City> sortByTimezone(){
+    public ArrayList<City> sortByTimezone() {
         ArrayList<City> sortColl = new ArrayList<City>(this.getCityCollection());
         sortColl.sort(Comparator.comparing(e -> e.getTimezone()));
 
@@ -252,16 +262,15 @@ public class CollectionManager {
     /**
      * находит элементы с одинаковыми id
      */
-    private void checkDuplicateId(){
+    private void checkDuplicateId() {
         List<City> cities = sortById();
 
-        for(int i=1;i<cities.size();i++) {
-            if(cities.get(i-1).getId().equals(cities.get(i).getId())) {
+        for (int i = 1; i < cities.size(); i++) {
+            if (cities.get(i - 1).getId().equals(cities.get(i).getId())) {
                 throw new DuplicateIdException("Поле id должно быть уникальным");
             }
         }
     }
-
 
 
     public ArrayList<City> getCityCollection() {

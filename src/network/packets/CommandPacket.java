@@ -7,7 +7,7 @@ public class CommandPacket implements Serializable {
     private String cmdName;
     private String[] args;
 
-    public CommandPacket(String cmdName, String[] args){
+    public CommandPacket(String cmdName, String[] args) {
         this.cmdName = cmdName;
         this.args = args;
     }

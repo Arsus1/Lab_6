@@ -5,7 +5,7 @@ public class AppConstant {
     public final static String CONNECT_URL = "localhost";
     public static final int MESSAGE_BUFFER = 65565;
 
-    public static final String FILE_PATH = System.getProperty("path","file.xml");
+    public static final String FILE_PATH = System.getProperty("path", "file.xml");
 
     public final static String VERSION = "0.2";
 }

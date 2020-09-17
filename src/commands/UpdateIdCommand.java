@@ -6,7 +6,7 @@ import managers.CollectionManager;
 import managers.ConsoleManager;
 
 public class UpdateIdCommand extends AbstractCommand {
-    public UpdateIdCommand(){
+    public UpdateIdCommand() {
         cmdName = "update";
         description = "обновляет значение элемента коллекции, id которого равен заданному";
         argCount = 1;
@@ -14,7 +14,7 @@ public class UpdateIdCommand extends AbstractCommand {
     }
 
     @Override
-    public Object getInput(ConsoleManager consoleManager){
+    public Object getInput(ConsoleManager consoleManager) {
         return consoleManager.getCity();
     }
 
@@ -27,10 +27,10 @@ public class UpdateIdCommand extends AbstractCommand {
             throw new InvalidValueException("Неверный тип данных");
         }
 
-        if(!collectionManager.checkIdExist(id))
+        if (!collectionManager.checkIdExist(id))
             throw new InvalidValueException("Такого id не существует");
 
-        if(needInput && inputData == null) inputData = this.getInput(consoleManager);
+        if (needInput && inputData == null) inputData = this.getInput(consoleManager);
         collectionManager.update((City) inputData, id);
         consoleManager.writeln("Элемент с id - " + id + " был изменен");
 

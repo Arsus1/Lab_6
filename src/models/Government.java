@@ -12,7 +12,7 @@ public enum Government implements Serializable {
 
     private int id;
 
-    Government(int id){
+    Government(int id) {
         this.id = id;
     }
 

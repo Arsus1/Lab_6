@@ -5,7 +5,7 @@ import managers.ConsoleManager;
 
 public class InfoCommand extends AbstractCommand {
 
-    public InfoCommand(){
+    public InfoCommand() {
         cmdName = "info";
         description = "выводит информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)";
     }

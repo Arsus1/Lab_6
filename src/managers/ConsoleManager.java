@@ -28,8 +28,7 @@ public class ConsoleManager {
     private Writer writer;
     private Reader reader;
 
-    public ConsoleManager(Reader reader, Writer writer, boolean isScript)
-    {
+    public ConsoleManager(Reader reader, Writer writer, boolean isScript) {
         this.reader = reader;
         this.writer = writer;
         scanner = new Scanner(reader);
@@ -49,7 +48,9 @@ public class ConsoleManager {
         }
     }
 
-    public boolean getIsScript(){ return isScript; }
+    public boolean getIsScript() {
+        return isScript;
+    }
 
     public String read() {
         return scanner.nextLine();
@@ -61,9 +62,10 @@ public class ConsoleManager {
 
     /**
      * получает введенные данные объектом
+     *
      * @return
      */
-    public City getCity(){
+    public City getCity() {
         boolean capital = false;
 
         String name = readWithMessage("Введите название города: ", false);
@@ -80,9 +82,9 @@ public class ConsoleManager {
             try {
                 capital = parseBoolean(readWithMessage("Это столица? (true/false): ", false));
                 break;
-            }catch(NumberFormatException ex){
+            } catch (NumberFormatException ex) {
                 writeln("Так true или false?");
-                if(isScript) throw new ExecutionException("Cast error");
+                if (isScript) throw new ExecutionException("Cast error");
             }
         }
 
@@ -95,9 +97,10 @@ public class ConsoleManager {
 
     /**
      * получает координаты
+     *
      * @return
      */
-    public Coordinates getCoord(){
+    public Coordinates getCoord() {
         float x = readWithParse("Введите позицию X (Float): ", false).floatValue();
         double y = readWithParseMinMax("Введите позицию Y (Double, от -587 до max): ", new BigDecimal(-587), NumUtil.DOUBLE_MAX, false).doubleValue();
 
@@ -106,6 +109,7 @@ public class ConsoleManager {
 
     /**
      * получает тип правления
+     *
      * @return
      */
     public Government getGoverment() {
@@ -125,7 +129,7 @@ public class ConsoleManager {
                 break;
             } catch (ClassCastException | InvalidValueException ex) {
                 writeln(ex.getMessage());
-                if(isScript) throw new ExecutionException("Cast error");
+                if (isScript) throw new ExecutionException("Cast error");
             }
         }
 
@@ -135,15 +139,17 @@ public class ConsoleManager {
 
     /**
      * получает возраст человека
+     *
      * @return
      */
-    public Human getHuman(){
+    public Human getHuman() {
         Integer age = readWithParseMinMax("Введите возвраст (Integer, от 0 до INTEGER_MAX): ", new BigDecimal(0), NumUtil.INTEGER_MAX, false).intValue();
         return new Human(age);
     }
 
     /**
      * парсит boolean значение из сотроки
+     *
      * @param s
      * @return
      */
@@ -152,7 +158,7 @@ public class ConsoleManager {
             return true;
         } else if ("false".equals(s.toLowerCase())) {
             return false;
-        }else{
+        } else {
             throw new NumberFormatException("Неверный тип данных");
         }
     }
@@ -160,6 +166,7 @@ public class ConsoleManager {
 
     /**
      * выводит сообщение с вводом от пользователя
+     *
      * @param message
      * @param canNull
      * @return
@@ -172,34 +179,35 @@ public class ConsoleManager {
                 writeln("Вы ввели пустую строку, попробуйте снова");
             }
 
-            if(!isScript) {
+            if (!isScript) {
                 writeln(message);
             }
 
             output = scanner.nextLine();
             output = output.isEmpty() ? null : output;
-        }while (!isScript && !canNull && output == null);
-        if(isScript && output == null)
+        } while (!isScript && !canNull && output == null);
+        if (isScript && output == null)
             throw new InvalidValueException("Ожидалось не null строка");
 
         return output;
     }
 
-    public Number readWithParse(String msg, boolean canNull){
+    public Number readWithParse(String msg, boolean canNull) {
         Number out = null;
 
-        while (true){
-            try{
+        while (true) {
+            try {
                 String num = readWithMessage(msg, canNull);
-                if(num == null && canNull) break;
+                if (num == null && canNull) break;
 
                 NumberFormat format = NumberFormat.getInstance();
                 ParsePosition pos = new ParsePosition(0);
                 out = format.parse(num, pos);
-                if (pos.getIndex() != num.length() || pos.getErrorIndex() != -1) throw new NumberFormatException("Неверный тип данных");
+                if (pos.getIndex() != num.length() || pos.getErrorIndex() != -1)
+                    throw new NumberFormatException("Неверный тип данных");
 
                 break;
-            }catch (NumberFormatException ex){
+            } catch (NumberFormatException ex) {
                 writeln(ex.getMessage());
             }
         }
@@ -207,14 +215,14 @@ public class ConsoleManager {
         return out;
     }
 
-    public Number readWithParseMinMax(String msg, BigDecimal min, BigDecimal max, boolean canNull){
+    public Number readWithParseMinMax(String msg, BigDecimal min, BigDecimal max, boolean canNull) {
         Number out = null;
 
         do {
             out = readWithParse(msg, canNull);
-            if(out == null && canNull)
+            if (out == null && canNull)
                 break;
-        }while (!NumUtil.isInRange(out, min, max));
+        } while (!NumUtil.isInRange(out, min, max));
 
         return out;
     }

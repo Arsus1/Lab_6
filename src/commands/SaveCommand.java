@@ -5,7 +5,7 @@ import managers.ConsoleManager;
 
 public class SaveCommand extends AbstractCommand {
 
-    public SaveCommand(){
+    public SaveCommand() {
         cmdName = "save";
         description = "сохраняет коллекцию в файл";
     }

@@ -3,6 +3,7 @@ package managers;
 import commands.*;
 import exceptions.InvalidValueException;
 import exceptions.NoCommandException;
+
 import java.util.*;
 
 /**
@@ -20,7 +21,7 @@ public class CommandsManager {
 
     private Map<String, AbstractCommand> commands = new HashMap<>();
 
-    public CommandsManager(){
+    public CommandsManager() {
         addCommand(new AddCommand());
         addCommand(new HelpCommand());
         addCommand(new ExitCommand());
@@ -39,7 +40,7 @@ public class CommandsManager {
         addCommand(new ExecuteScriptCommand());
     }
 
-    private void addCommand(AbstractCommand cmd){
+    private void addCommand(AbstractCommand cmd) {
         commands.put(cmd.getCmdName(), cmd);
     }
 
@@ -50,12 +51,12 @@ public class CommandsManager {
         return commands.get(s);
     }
 
-    public AbstractCommand parseCommand(String str){
+    public AbstractCommand parseCommand(String str) {
         AbstractCommand cmd = null;
         String[] parse = str.trim().split("\\s+");
         cmd = getCommand(parse[0].toLowerCase());
         String[] args = Arrays.copyOfRange(parse, 1, parse.length);
-        if(cmd.getArgCount() == args.length)
+        if (cmd.getArgCount() == args.length)
             cmd.setArgs(args);
         else throw new InvalidValueException("Введено " + args.length + " аргументов, ожидалось " + cmd.getArgCount());
 
@@ -64,11 +65,12 @@ public class CommandsManager {
 
     /**
      * Выполняет команды введенные пользователем
+     *
      * @param str
      * @param consoleManager
      * @param collectionManager
      */
-    public void execute(String str, ConsoleManager consoleManager, CollectionManager collectionManager){
+    public void execute(String str, ConsoleManager consoleManager, CollectionManager collectionManager) {
         parseCommand(str).execute(consoleManager, collectionManager);
     }
 

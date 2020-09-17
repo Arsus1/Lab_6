@@ -5,7 +5,7 @@ import managers.ConsoleManager;
 
 public class ShowCommand extends AbstractCommand {
 
-    public ShowCommand(){
+    public ShowCommand() {
         cmdName = "show";
         description = "выводит все элементы коллекции";
     }

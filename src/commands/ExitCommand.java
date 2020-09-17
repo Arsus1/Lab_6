@@ -5,7 +5,7 @@ import managers.ConsoleManager;
 
 public class ExitCommand extends AbstractCommand {
 
-    public ExitCommand(){
+    public ExitCommand() {
         cmdName = "exit";
         description = "выход из программы без сохранения";
     }

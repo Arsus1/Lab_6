@@ -34,11 +34,9 @@ public class Server {
     }
 
 
-
-
     private boolean isRunning = false;
     private DatagramChannel channel;
-    private Map<String, SocketAddress> clients =  new HashMap<String, SocketAddress>();
+    private Map<String, SocketAddress> clients = new HashMap<String, SocketAddress>();
     private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private Selector selector = Selector.open();
 
@@ -55,12 +53,12 @@ public class Server {
         try {
             if (args.length == 1) {
                 startServer(Integer.parseInt(args[0]));
-            }else{
+            } else {
                 startServer(AppConstant.DEFAULT_PORT);
             }
         } catch (SocketException ex) {
             System.err.println(ex.getMessage());
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.err.println(ex.getMessage());
             System.exit(1);
         }
@@ -94,7 +92,7 @@ public class Server {
         log.info("Server started. Listening port {}", port);
     }
 
-    private void stopServer(){
+    private void stopServer() {
         isRunning = false;
     }
 
@@ -107,18 +105,17 @@ public class Server {
         clientKey.attach(new Con());
 
 
-
         ConsoleManager cm = new ConsoleManager(new InputStreamReader(System.in), new OutputStreamWriter(System.out), false);
-        while(isRunning){
+        while (isRunning) {
             try {
                 selector.select(700);
                 Iterator selectedKeys = selector.selectedKeys().iterator();
 
-                if (System.in.available() > 0){
+                if (System.in.available() > 0) {
                     try {
                         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
                         CommandsManager.getInstance().execute(r.readLine(), cm, collectionManager);
-                    }catch (Exception ex){
+                    } catch (Exception ex) {
                         cm.writeln(ex.getMessage());
                     }
                 }
@@ -126,11 +123,11 @@ public class Server {
 
                 while (selectedKeys.hasNext()) {
 
-                    if (System.in.available() > 0){
+                    if (System.in.available() > 0) {
                         try {
                             BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
                             CommandsManager.getInstance().execute(r.readLine(), consoleManager, collectionManager);
-                        }catch (Exception ex){
+                        } catch (Exception ex) {
                             consoleManager.writeln(ex.getMessage());
                         }
                     }
@@ -154,14 +151,14 @@ public class Server {
                 }
 
             } catch (IOException e) {
-                log.error("IO Exception... " +(e.getMessage()!=null?e.getMessage():""));
+                log.error("IO Exception... " + (e.getMessage() != null ? e.getMessage() : ""));
             }
         }
     }
 
     private void read(SelectionKey key) throws IOException, ClassNotFoundException {
-        DatagramChannel chan = (DatagramChannel)key.channel();
-        Con con = (Con)key.attachment();
+        DatagramChannel chan = (DatagramChannel) key.channel();
+        Con con = (Con) key.attachment();
         con.sa = chan.receive(con.req);
         con.req.flip();
 
@@ -169,22 +166,22 @@ public class Server {
         byte bytes[] = new byte[limits];
         con.req.get(bytes, 0, limits);
 
-        Object obj  = Serializer.Deserialize(bytes);
+        Object obj = Serializer.Deserialize(bytes);
         con.req.clear();
 
         con.resp = ByteBuffer.wrap(Serializer.Serialize(objectHandler(obj, con.sa)));
     }
 
     private void write(SelectionKey key) throws IOException {
-        DatagramChannel chan = (DatagramChannel)key.channel();
-        Con con = (Con)key.attachment();
+        DatagramChannel chan = (DatagramChannel) key.channel();
+        Con con = (Con) key.attachment();
         chan.send(con.resp, con.sa);
     }
 
 
     private Object objectHandler(Object obj, SocketAddress client) throws IOException {
         Object outObj = null;
-        if(obj instanceof LoginPacket) {
+        if (obj instanceof LoginPacket) {
             if (!clients.containsKey(((LoginPacket) obj).getNick())) {
                 clients.put(((LoginPacket) obj).getNick(), client);
                 outObj = new LoginSuccessPacket("Connected");
@@ -193,18 +190,18 @@ public class Server {
                 outObj = new LoginFailedPacket("User with this nick already exists");
             }
 
-        } else if(obj instanceof LogoutPacket){
+        } else if (obj instanceof LogoutPacket) {
             if (clients.containsKey(((LogoutPacket) obj).getNick())) {
                 clients.remove(((LogoutPacket) obj).getNick());
                 log.info("User disconnected " + ((LogoutPacket) obj).getNick() + ": " + client);
             }
 
-        }else if(obj instanceof AbstractCommand){
+        } else if (obj instanceof AbstractCommand) {
             outputStream.reset();
             try {
                 ((AbstractCommand) obj).execute(consoleManager, collectionManager);
                 outObj = new CommandExecutionPacket(new String(outputStream.toByteArray()));
-            }catch (InvalidValueException ex){
+            } catch (InvalidValueException ex) {
                 outObj = new CommandExecutionPacket(ex.getMessage());
             }
             log.info(obj.toString());

@@ -4,7 +4,7 @@ import managers.CollectionManager;
 import managers.ConsoleManager;
 
 public class ClearCommad extends AbstractCommand {
-    public ClearCommad(){
+    public ClearCommad() {
         cmdName = "clear";
         description = "очищает коллекцию";
     }

@@ -6,7 +6,7 @@ public class LoginSuccessPacket implements Serializable {
 
     private final String message;
 
-    public LoginSuccessPacket(String message){
+    public LoginSuccessPacket(String message) {
         this.message = message;
     }
 

@@ -28,17 +28,17 @@ public class CLI {
             consoleManager.write("> ");
             if (consoleManager.hasNextLine()) {
                 String cmd = consoleManager.read().trim();
-                if(cmd.equals("")) continue;
+                if (cmd.equals("")) continue;
 
                 try {
                     CommandsManager.getInstance().execute(cmd, consoleManager, collectionManager);
-                }catch (NoCommandException ex) {
+                } catch (NoCommandException ex) {
                     consoleManager.writeln("Такая команда не найдена :(\nВведите команду help, чтобы вывести спискок команд");
                     log.error(ex.getMessage());
-                }catch (NumberFormatException|ClassCastException ex){
-                    consoleManager.writeln("Ошибка во время каста\n"+ex.getMessage());
+                } catch (NumberFormatException | ClassCastException ex) {
+                    consoleManager.writeln("Ошибка во время каста\n" + ex.getMessage());
                     log.error(ex.getMessage());
-                } catch (InvalidValueException ex){
+                } catch (InvalidValueException ex) {
                     consoleManager.writeln(ex.getMessage());
                     log.error(ex.getMessage());
                 }
